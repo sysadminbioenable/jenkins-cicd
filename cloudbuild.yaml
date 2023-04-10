@@ -8,5 +8,4 @@ steps:
   args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage']
   id: Pushing the image to registry
 # Deploy container image to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy','$SERVICE', '--image', 'us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage', '--region', 'us-central1', '--platform', 'managed', "--allow-unauthenticated"]
+
