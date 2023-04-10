@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: web
+  name: helloworld
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - image: gcr.io/virtual-anchor-319409/spinnaker-demo
+        name: helloworld
+        resources: {}
+status: {}
