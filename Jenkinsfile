@@ -6,6 +6,7 @@ pipeline {
         ARTIFACT_REGISTRY_LOCATION = 'us-central1'
         ARTIFACT_REGISTRY_REPOSITORY = 'my-docker-repo'
         ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
+        GCP_SA='demo-key'
     }
 
    stages {
@@ -17,6 +18,7 @@ pipeline {
 
         stage('Build and push Docker image') {
             steps {
+                bat "cmd gcloud auth activate-service-account --key-file=$demo-key"
                 bat  "cmd docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
                 bat "cmd docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
             }
