@@ -26,6 +26,7 @@ pipeline {
             steps {
                 bat "cmd docker pull ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
             }
+        }
 
         stage('Deploy to Cloud Run') {
             steps {
