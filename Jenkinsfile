@@ -3,24 +3,29 @@ pipeline {
 
     environment {
         PROJECT_ID = 'gps-integrated'
-        IMAGE = 'gcr.io/gps-integrated/myimage'
-        REGION = 'us-central1'
-        SERVICE_NAME = 'test'
+        ARTIFACT_REGISTRY_LOCATION = 'us-central1'
+        ARTIFACT_REGISTRY_REPOSITORY = 'my-docker-repo'
+        ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
     }
 
-    stages {
-        stage('Build and push container image') {
+   stages {
+        stage('Authenticate with Artifact Registry') {
             steps {
-                script {
-                    docker.withRegistry('https://gcr.io', 'gcr-auth') {
-                        def dockerfile = "Dockerfile"
-                        def buildArgs = "--build-arg some_argument=value"
-                        def image = docker.build("${IMAGE}:${env.BUILD_NUMBER}", "-f ${dockerfile} ${buildArgs} .")
-                        image.push()
-                    }
-                }
+                bat "cmd gcloud auth configure-docker ${ARTIFACT_REGISTRY_REGISTRY}"
             }
         }
+
+        stage('Build and push Docker image') {
+            steps {
+                bat  "cmd docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
+                bat "cmd docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
+            }
+        }
+
+        stage('Pull Docker image from Artifact Registry') {
+            steps {
+                bat "cmd docker pull ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
+            }
 
         stage('Deploy to Cloud Run') {
             steps {
