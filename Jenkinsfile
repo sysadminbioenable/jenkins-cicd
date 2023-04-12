@@ -13,7 +13,7 @@ pipeline {
     stage('Build and push Docker image') {
       steps {
         // Authenticate with Google Cloud using service account key
-        withCredentials([file(credentialsId: 'test') {
+        withCredentials([file(credentialsId: 'test', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
          
             bat "cmd /c gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
             bat "cmd /c gcloud auth configure-docker --quiet"
