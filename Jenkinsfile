@@ -1,42 +1,44 @@
 pipeline {
-    agent any
-    environment {
-        PROJECT_ID = 'gps-integrated'
-        ARTIFACT_REGISTRY_LOCATION = 'us-central1'
-        ARTIFACT_REGISTRY_REPOSITORY = 'my-docker-repo'
-        ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
-        SERVICE_NAME = 'test'
-        GCP_SA = 'gps-integrated'
-        REGION = 'us-central1'
+  agent any
+  
+  environment {
+    PROJECT_ID = "gps-intregated"
+    SERVICE_NAME = "test"
+    REGION = "us-central1"
+    IMAGE_NAME = "myimage"
+    REGISTRY_HOSTNAME = "gcr.io"
+  }
+  
+  stages {
+    stage('Build and push Docker image') {
+      steps {
+        // Authenticate with Google Cloud using service account key
+        withCredentials([file(credentialsId: 'gps-intregated', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+         
+            bat "cmd /c gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+            bat "cmd /c gcloud auth configure-docker --quiet"
+         
+        }
+        
+        // Build Docker image and tag it
+       bat "cmd /c docker build -t ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG} ."
+        
+        // Push Docker image to Google Artifact Registry
+        bat "cmd /c docker push ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG}"
+      }
     }
-    stages {
-
-        stage('Example') {
-            steps {
-                echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-            }
-        }
-
-       
-
-        stage ('Tagging & Pushing the image'){
-            steps{
-               
-                bat  "cmd /c  docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
-                bat "cmd /c docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
-                
-            }
-        }
-         stage('Deploy to Cloud Run') {
-            steps {
-                script {
-                    def gcloud = tool 'google-cloud-sdk'
-
-                    bat "cmd /c ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
-                    bat "cmd /c ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} --region ${REGION} --platform managed"
-                }
-            }
-        }
-
+    
+    stage('Deploy to Cloud Run') {
+      steps {
+        // Deploy the Docker image to Cloud Run
+      bat """ cmd /c
+          gcloud run deploy ${SERVICE_NAME} \
+            --image=${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG} \
+            --platform=managed \
+            --region=${REGION} \
+            --allow-unauthenticated
+        """
+      }
     }
+  }
 }
