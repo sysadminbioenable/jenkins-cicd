@@ -38,6 +38,7 @@ pipeline {
             --image=${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME} \
             --platform=managed \
             --region=${REGION} \
+            --project="gps-integrated"
             --allow-unauthenticated
         """
       }
