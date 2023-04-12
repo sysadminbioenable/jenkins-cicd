@@ -23,10 +23,10 @@ pipeline {
         }
         
         // Build Docker image and tag it
-       bat "cmd /c docker build -t ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG} ."
+       bat "cmd /c docker build -t ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME} ."
         
         // Push Docker image to Google Artifact Registry
-        bat "cmd /c docker push ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG}"
+        bat "cmd /c docker push ${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}"
       }
     }
     
@@ -35,7 +35,7 @@ pipeline {
         // Deploy the Docker image to Cloud Run
       bat """ cmd /c
           gcloud run deploy ${SERVICE_NAME} \
-            --image=${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME}:${TAG} \
+            --image=${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME} \
             --platform=managed \
             --region=${REGION} \
             --allow-unauthenticated
