@@ -15,11 +15,7 @@ pipeline {
             }
         }
 
-        stage ('Build') {
-            steps {
-                bat "cmd docker build -t helloworld:$BUILD_NUMBER ."
-            }            
-        }
+       
 
         stage ('Tagging & Pushing the image'){
             steps{
