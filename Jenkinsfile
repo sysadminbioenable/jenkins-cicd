@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_ID = 'your-project-id'
-        IMAGE = 'gcr.io/your-project-id/your-image-name'
+        PROJECT_ID = 'gps-integrated'
+        IMAGE = 'gcr.io/gps-integrated/us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage'
         REGION = 'us-central1'
-        SERVICE_NAME = 'your-service-name'
+        SERVICE_NAME = 'test'
     }
 
     stages {
@@ -27,8 +27,8 @@ pipeline {
                 script {
                     def gcloud = tool 'google-cloud-sdk'
 
-                    sh "${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
-                    sh "${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${IMAGE}:${env.BUILD_NUMBER} --region ${REGION} --platform managed"
+                    bat "cmd ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
+                    bat "cmd ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${IMAGE}:${env.BUILD_NUMBER} --region ${REGION} --platform managed"
                 }
             }
         }
