@@ -21,7 +21,7 @@ pipeline {
 
         stage ('Tagging & Pushing the image'){
             steps{
-                bat "cmd /c gcloud auth activate-service-account --key-file=$GCP_SA"
+               
                 bat  "cmd /c  docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
                 bat "cmd /c docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
                 
