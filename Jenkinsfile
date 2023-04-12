@@ -16,7 +16,7 @@ pipeline {
         withCredentials([file(credentialsId: 'test', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
          
             bat "cmd /c gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
-            bat "cmd /c  gcloud components install docker-credential-gcr"
+           
             bat "cmd /c gcloud auth configure-docker --quiet"
          
         }
