@@ -21,9 +21,9 @@ pipeline {
 
         stage ('Tagging & Pushing the image'){
             steps{
-                bat "cmd -c gcloud auth activate-service-account --key-file=$GCP_SA"
-                bat  "cmd -c  docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
-                bat "cmd -c docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
+                bat "cmd /c gcloud auth activate-service-account --key-file=$GCP_SA"
+                bat  "cmd /c  docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
+                bat "cmd /c docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
                 
             }
         }
@@ -32,8 +32,8 @@ pipeline {
                 script {
                     def gcloud = tool 'google-cloud-sdk'
 
-                    bat "cmd -c ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
-                    bat "cmd -c ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} --region ${REGION} --platform managed"
+                    bat "cmd /c ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
+                    bat "cmd /c ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} --region ${REGION} --platform managed"
                 }
             }
         }
