@@ -25,6 +25,16 @@ pipeline {
                 
             }
         }
+         stage('Deploy to Cloud Run') {
+            steps {
+                script {
+                    def gcloud = tool 'google-cloud-sdk'
+
+                    bat "cmd ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
+                    bat "cmd ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} --region ${REGION} --platform managed"
+                }
+            }
+        }
 
     }
 }
