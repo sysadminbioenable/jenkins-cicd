@@ -7,6 +7,7 @@ pipeline {
         ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
         SERVICE_NAME = 'test'
         GCP_SA = 'demo-key'
+        REGION = 'us-central1'
     }
     stages {
 
