@@ -18,7 +18,7 @@ pipeline {
             bat "cmd /c gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
            
             bat "cmd /c gcloud auth configure-docker --quiet"
-            bat "cmd /c docker-credential-gcr.io configure
+            bat "cmd /c docker-credential-gcr.io configure"
          
         }
         
