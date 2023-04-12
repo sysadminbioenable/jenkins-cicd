@@ -1,44 +1,34 @@
 pipeline {
     agent any
-
     environment {
-        PROJECT_ID = 'gps-integrated'
-        ARTIFACT_REGISTRY_LOCATION = 'us-central1'
-        ARTIFACT_REGISTRY_REPOSITORY = 'my-docker-repo'
-        ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
-        GCP_SA='demo-key'
+        PROJECT_ID = gps-integrated'
+        GCP_SA = 'demo-key'
     }
+    stages {
 
-   stages {
-        stage('Authenticate with Artifact Registry') {
+        stage('Example') {
             steps {
-                bat "cmd gcloud auth configure-docker ${ARTIFACT_REGISTRY_REGISTRY}"
+                echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
 
-        stage('Build and push Docker image') {
+        stage ('Build') {
             steps {
-                bat "cmd gcloud auth activate-service-account --key-file=$GCP_SA"
-                bat  "cmd docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
-                bat "cmd docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
+                sh '''
+                    docker build -t helloworld:$BUILD_NUMBER .
+                '''
+            }            
+        }
+
+        stage ('Tagging & Pushing the image'){
+            steps{
+                sh '''
+                    gcloud auth activate-service-account --key-file=$GCP_SA
+                    docker tag helloworld:$BUILD_NUMBER gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER
+                    docker push gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER
+                '''
             }
         }
 
-        stage('Pull Docker image from Artifact Registry') {
-            steps {
-                bat "cmd docker pull ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
-            }
-        }
-
-        stage('Deploy to Cloud Run') {
-            steps {
-                script {
-                    
-
-                    bat "cmd ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
-                    bat "cmd ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${IMAGE}:${env.BUILD_NUMBER} --region ${REGION} --platform managed"
-                }
-            }
-        }
     }
 }
