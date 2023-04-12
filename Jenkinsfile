@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build and push Docker image') {
             steps {
-                bat "cmd gcloud auth activate-service-account --key-file=$demo-key"
+                bat "cmd gcloud auth activate-service-account --key-file=$GCP_SA"
                 bat  "cmd docker build -t ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY} ."
                 bat "cmd docker push ${ARTIFACT_REGISTRY_REGISTRY}/${PROJECT_ID}/${ARTIFACT_REGISTRY_REPOSITORY}"
             }
