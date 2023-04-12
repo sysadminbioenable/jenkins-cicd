@@ -5,6 +5,7 @@ pipeline {
         ARTIFACT_REGISTRY_LOCATION = 'us-central1'
         ARTIFACT_REGISTRY_REPOSITORY = 'my-docker-repo'
         ARTIFACT_REGISTRY_REGISTRY = 'gcr.io'
+        SERVICE_NAME = 'test'
         GCP_SA = 'demo-key'
     }
     stages {
