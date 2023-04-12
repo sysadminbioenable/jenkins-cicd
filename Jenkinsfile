@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = gps-integrated'
+        PROJECT_ID = 'gps-integrated'
         GCP_SA = 'demo-key'
     }
     stages {
