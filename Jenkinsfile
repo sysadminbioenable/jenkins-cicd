@@ -14,19 +14,16 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh '''
-                    docker build -t helloworld:$BUILD_NUMBER .
-                '''
+                bat "cmd docker build -t helloworld:$BUILD_NUMBER ."
             }            
         }
 
         stage ('Tagging & Pushing the image'){
             steps{
-                sh '''
-                    gcloud auth activate-service-account --key-file=$GCP_SA
-                    docker tag helloworld:$BUILD_NUMBER gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER
-                    docker push gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER
-                '''
+                bat "cmd  gcloud auth activate-service-account --key-file=$GCP_SA"
+                bat "cmd   docker tag helloworld:$BUILD_NUMBER gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER"
+                bat "cmd  docker push gcr.io/$PROJECT_ID/helloworld:$BUILD_NUMBER"
+                
             }
         }
 
