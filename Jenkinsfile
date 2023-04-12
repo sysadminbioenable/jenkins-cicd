@@ -33,7 +33,7 @@ pipeline {
         stage('Deploy to Cloud Run') {
             steps {
                 script {
-                    def gcloud = tool 'google-cloud-sdk'
+                    
 
                     bat "cmd ${gcloud}/bin/gcloud config set project ${PROJECT_ID}"
                     bat "cmd ${gcloud}/bin/gcloud beta run deploy ${SERVICE_NAME} --image ${IMAGE}:${env.BUILD_NUMBER} --region ${REGION} --platform managed"
