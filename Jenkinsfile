@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PROJECT_ID = 'gps-integrated'
-        IMAGE = 'gcr.io/gps-integrated/us-central1-docker.pkg.dev/${PROJECT_ID}/my-docker-repo/myimage'
+        IMAGE = 'gcr.io/gps-integrated/myimage'
         REGION = 'us-central1'
         SERVICE_NAME = 'test'
     }
