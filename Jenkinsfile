@@ -35,7 +35,7 @@ pipeline {
         // Deploy the Docker image to Cloud Run
       bat """ cmd /c
           gcloud run deploy ${SERVICE_NAME} \
-            --image=${REGISTRY_HOSTNAME}/${PROJECT_ID}/${IMAGE_NAME} \
+            --image=${REGISTRY_HOSTNAME}/nisarg-cludrun/${IMAGE_NAME} \
             --platform=managed \
             --region=${REGION} \
             --project="nisarg-cludrun"
