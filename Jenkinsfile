@@ -2,7 +2,7 @@ pipeline {
   agent any
   
   environment {
-    PROJECT_ID = "gps-integrated"
+    PROJECT_ID = "nisarg-cludrun"
     SERVICE_NAME = "test"
     REGION = "us-central1"
     IMAGE_NAME = "myimage"
